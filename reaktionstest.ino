@@ -25,17 +25,13 @@ void loop() {
 
   for (int i=0; i<10; i+=2) {
       digitalWrite(barPins[i], HIGH);
-  }
-   
+  }   
   delay(500);
   
- for (int i=0; i<10; i+=2) {
+  for (int i=0; i<10; i+=2) {
       digitalWrite(barPins[i], LOW);
   }
   delay(500);
-
-   Serial.print("Task A running on core ");
-  Serial.println(xPortGetCoreID());
 }
 
 
@@ -43,15 +39,12 @@ void blinker( void * parameter) {
   for(;;) {
     for (int i=1; i<10; i+=2) {
       digitalWrite(barPins[i], HIGH);
-  }
+    }
    
     delay(331);
-       for (int i=1; i<10; i+=2) {
+    for (int i=1; i<10; i+=2) {
       digitalWrite(barPins[i], LOW);
-  }
+    }
     delay(331);   
-
-    Serial.print("Task B running on core ");
-  Serial.println(xPortGetCoreID());
   }
 }
