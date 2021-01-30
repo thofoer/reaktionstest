@@ -12,7 +12,8 @@
 #define STATUS_COUNTDOWN  1
 #define STATUS_ACTION  2
 
-#define VALUE_FOUL  -1
+#define VALUE_HIHO  -1
+#define VALUE_FOUL  -2
 #define VALUE_OFF  0
 
 #define BAR_LED_COUNT 10
@@ -20,8 +21,8 @@
 #define MIN_WAIT 3000
 #define MAX_WAIT 7000
 
-#define DELAY_MILLIS 2
-#define DELAY_US 10
+#define DELAY_MILLIS 1
+#define DELAY_US 4
 
 volatile int numberOfButtonInterrupts = 0;
 volatile bool lastState;
@@ -38,7 +39,7 @@ const int barPins[] = { 16, 17, 13, 12, 14, 27, 26, 25, 33, 32 };
 const int digitPin[] = {21, 19, 18, 5};        // Define 7-segment display common pin
 
 //                    0     1     2     3     4     5     6     7     8     9     A     b     C    d      E     F     H     U     L
-unsigned char num[]={0xfc, 0x60, 0xdb, 0xf3, 0x67, 0xb7, 0xbf, 0xe0, 0xfe, 0xf7, 0xef, 0x3f, 0x9c, 0x7b, 0x9e, 0x8e, 0x9e, 0x7c, 0x1c};
+unsigned char num[]={0xfc, 0x60, 0xdb, 0xf3, 0x67, 0xb7, 0xbf, 0xe0, 0xfe, 0xf7, 0xef, 0x3f, 0x9c, 0x7b, 0x9e, 0x8e, 0x6e, 0x7c, 0x1c};
 
 
 volatile int countdownValue = 0;
@@ -67,7 +68,7 @@ void setup() {
 }
 
 void loop() {
-  value=8;
+  value=VALUE_HIHO;
   vTaskDelay(1000000 / portTICK_PERIOD_MS);     
 }
 
@@ -145,16 +146,16 @@ void display( void * parameter ) {
      int showValue = value;             
           //Serial.printf("showValue= %d!\n", value);
      if (showValue>=0) {
-       //showDigit(0,3, num[showValue%10000/1000]);    
-       //showDigit(1,0, num[showValue%1000/100]);        
-      // showDigit(2,1, num[showValue%100/10]);    
+       showDigit(0,3, num[showValue%10000/1000]);    
+       showDigit(1,0, num[showValue%1000/100]);        
+       showDigit(2,1, num[showValue%100/10]);    
        showDigit(3,2, num[showValue%10]);    
      }
      else if (showValue==-1) {
        showDigit(0,3, num[16]);
-       showDigit(1,0, num[17]);
+       showDigit(1,0, num[1]);
        showDigit(2,1, num[16]);
-       showDigit(3,2, num[17]);
+       showDigit(3,2, num[0]);
      }
      else if (showValue==-2) {
        showDigit(0,3, num[15]);
@@ -168,7 +169,7 @@ void display( void * parameter ) {
        showDigit(2,1, 255);
        showDigit(3,2, 255);
      }    
-     //vTaskDelay(DELAY_MILLIS / portTICK_PERIOD_MS);  
+     
   }
 }
 
